@@ -12,7 +12,7 @@ PVector speedBackground;
 // red circle
 PVector mouse, mouseS, mouseE;
 PVector speedR;
-float easingR = 0.05;
+float easingR = 0.047;
 
 float easingBackground = 0.02;
 PVector offsetVector;
@@ -38,6 +38,13 @@ float lineEndX;
 float lineEndY;
 int backgroundCircleSize;
 
+PVector blackRectStart;
+PVector blackRectEnd;
+float blackRectSpread = 10;
+float blackRectEasing = 0.01;
+float blackRectSpeedMeter = 0.001;
+BlackRectMover blackRectMover;
+
 RedFlower redflower;
 
 void setup() {
@@ -46,7 +53,8 @@ void setup() {
   weight = random(1);
   strokeWeight(weight); // 線の太さをランダムに設定
   frameRate(120);
-  background(244, 235, 252);
+  //background(244, 235, 252);
+  background(0, 0, 0);
 
   backgroundCircleSize=80;
   redflower= new RedFlower();
@@ -66,16 +74,26 @@ void setup() {
   blue = color(220, 230, 255);
 
   // draw background circle
-
-  background(255); // 背景色を白に設定
-  fill(0, 150, 255); // 円の塗りつぶし色を設定
+  //NO.1
   noStroke(); // 円の輪郭を非表示
 
+  int circleCountB = 1000; // 円の数
+  float centerXB = width / 2; // 円の中心X座標
+  float centerYB = height / 2; // 円の中心Y座標
+  float baseDiameterB = dist(0, 0, width, height ); // 最大の円の直径
+
+  // 円を直接描画
+  for (int i = 0; i < circleCountB; i++) {
+    // `BackgroundBaseCircle`のインスタンスを生成して描画
+    new BackgroundBaseCircle(centerXB, centerYB, baseDiameterB, i, circleCountB).display();
+  }
+
+  //setup rotate
   translate(width / 2, height / 2); // キャンバスの中心を原点に設定
 
   int numRotations = 80; // 回転の回数
   float angleStep = TWO_PI / numRotations; // 回転角度のステップ
-  float gap = 30; // 円と円の間隔
+  float gap = 10; // 円と円の間隔
   float maxRadius = 70; // 最大の円の半径
   float minRadius = 20; // 最小の円の半径
   int countBack =0;
@@ -84,40 +102,86 @@ void setup() {
   color whiteColor = color(200, 200, 200);
   color greenColor = color(184, 181, 209);
   color blueColor = color(244, 235, 252);
+  float angleAccount=0;
+
+  //No.1
+  //gap = 5; // 円と円の間隔
+  //numRotations=60;
+  //minRadius=20;
+  //maxRadius=150;
+  //angleStep = TWO_PI / numRotations; // 回転角度のステップ
+  //numCircles = int(dist(0, 0, width/2, height/2)/gap);
+  //whiteColor=color(41, 36, 93);
+  //blueColor=color(12, 8, 52);
+  //greenColor=color(12, 8, 52);
+  //strokeWeight(0.3);
+
+  //redflower.setBackground(numCircles, minRadius, maxRadius, gap, whiteColor, blueColor, greenColor);
+
+  //for (int i = 0; i < numRotations; i++) {
+  //  pushMatrix(); // 座標系を保存
+  //  angleAccount=angleAccount+angleStep;
+  //  rotate(angleAccount); // 回転
+  //  redflower.drawBackground();
+  //  countBack+=1;
+  //  popMatrix(); // 座標系を復元
+  //}
+
+  //No.2
+  gap = 30; // 円と円の間隔
+  numRotations=40;
+  minRadius=55;
+  maxRadius=0;
+  angleStep = TWO_PI / numRotations; // 回転角度のステップ
+  numCircles = int(dist(0, 0, width/2, height/2)/gap);
+  whiteColor=color(244, 235, 252, 20);
+  blueColor=color(184, 181, 209, 20);
+  greenColor=color(200, 200, 200, 20);
+
+  //whiteColor=color(238,255,18, 20);
+  //blueColor=color(238,255,18, 20);
+  //greenColor=color(238,255,18, 20);
+
+  stroke(0);
+  strokeWeight(1.5);
+  redflower.setBackground(numCircles, minRadius, maxRadius, gap, whiteColor, blueColor, greenColor);
+  for (int i = 0; i < numRotations; i++) {
+    pushMatrix(); // 座標系を保存
+    angleAccount=angleAccount+angleStep;
+    rotate(angleAccount); // 回転
+    redflower.drawBackground();
+    countBack+=1;
+    popMatrix(); // 座標系を復元
+  }
+
+  //NO.3
+  gap = 60; // 円と円の間隔
+  numRotations=20;
+  minRadius=10;
+  maxRadius=100;
+  angleStep = TWO_PI / numRotations; // 回転角度のステップ
+  numCircles = int(dist(0, 0, width/2, height/2)/gap);
+
+  whiteColor=color(55, 10);
+  blueColor=color(0, 10);
+  greenColor=color(0, 10);
+
+  strokeWeight(1.5);
+  stroke(200);
+  stroke(238, 255, 18, 50);
+
+  redflower.setBackground(numCircles, minRadius, maxRadius, gap, whiteColor, blueColor, greenColor);
 
   for (int i = 0; i < numRotations; i++) {
     pushMatrix(); // 座標系を保存
-    rotate(i * angleStep); // 回転
-    // 円を描画
-    for (int j = 0; j < numCircles; j++) {
-      float radius = lerp(minRadius, maxRadius, j / float(numCircles - 1));
-      float y = -j * gap;
-      if (j%2==0) {
-        fill(244, 235, 252);
-      } else {
-        fill(whiteColor);
-      }
-      //noStroke();
-      stroke(0);
-      ellipse(0, y, radius * 2, radius * 2);
-      if (j%2==0) {
-        color c = lerpColor(blueColor, whiteColor, j / float(numCircles - 1));
-        fill(c);
-      } else {
-        //fill(244, 235, 252);
-        fill(255);
-        color c = lerpColor(whiteColor, greenColor, j / float(numCircles - 1));
-        fill(c);
-      }
-      //noStroke();
-      stroke(0);
-      strokeWeight(1.5);
-      ellipse(0, y, radius * 1.7, radius * 1.7);
-    }
+    angleAccount=angleAccount+angleStep;
+    rotate(angleAccount); // 回転
+    redflower.drawBackground();
     countBack+=1;
     popMatrix(); // 座標系を復元
   }
   resetMatrix(); // 座標系をリセット（translateの解除）
+
 
   //red circle setup
   currentFront = new PVector();
@@ -127,24 +191,62 @@ void setup() {
   easingFront = 0.04;
   offsetVector = new PVector(1, -1);
 
+  //draw balckrect
+  blackRectSpread = 10;
+  blackRectEasing = 0.01;
+  blackRectSpeedMeter = 0.001;
+
+  // 初期化
+  blackRectStart = new PVector(width, height); // 開始位置
+  blackRectEnd = new PVector(0, 0); // 終了位置
+  blackRectMover = new BlackRectMover(blackRectStart, blackRectEnd, blackRectSpread, blackRectEasing, blackRectSpeedMeter);
+  blackRectMover.update();
+
+  //draw blue circle
+  strokeWeight(1);
+  int numberBlue=50;
+  float radiusBlue=5;
+  int randomjudge=2;
+  noStroke();
+  for (int i = 0; i < numberBlue; i++) {
+    float random1 = random(1);
+    int random2 = int(random(-randomjudge, randomjudge));
+    int random3 = int(random(-randomjudge, randomjudge));
+    
+    fill(35, 35, 255);
+    
+    if (random1 < 0.95) {
+      stroke(0);
+      strokeWeight(2);
+      if (i==0) {
+        ellipse(width/2, height/2, radiusBlue * (numberBlue - i), radiusBlue * (numberBlue - i));
+      } else {
+        stroke(0);
+        strokeWeight(0.5);
+        noFill();
+        ellipse(width/2+radiusBlue*random2, height/2+radiusBlue*random3, radiusBlue * (numberBlue - i), radiusBlue * (numberBlue - i));
+      }
+    }
+  }
+
+
   //draw red circle
   startFront.set(0, 0);
   endFront.set(width, height);
-  float mult=1;
-  
+  float mult=0.005;
+
   float r=7;
   redflower.initialize(startFront.x, startFront.y, endFront.x, endFront.y, mult, r);
 
-
   spread=10;
-  float ratio = 0.4;
+  float ratio = 0.3;
   int rectsize = 50;
   lineEndX=width/2;
   lineEndY=height/2;
-  
+
   redflower.setRectangles(ratio, rectsize, lineEndX, lineEndY);
   redflower.drawRed();
-  
+
   startFront.set(0, height*0.5);
   endFront.set(width*0.25, height);
   saveFrame("barabara.png");
