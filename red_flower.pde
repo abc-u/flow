@@ -32,7 +32,7 @@ class RedFlower {
     this.movedPos = new PVector(x, y);
   }
 
-  void setBackground(int n, float minR, float maxR, float g,color WC, color BC, color GC) {
+  void setBackground(int n, float minR, float maxR, float g, color WC, color BC, color GC) {
     numCirclesB=n;
     minRadiusB=minR;
     maxRadiusB=maxR;
@@ -67,8 +67,12 @@ class RedFlower {
   }
 
   void drawCircle() {
-    number = int(random(7, 20));
-    radius = r;
+    //radius = r;
+    radius=5;
+    float circleLength=130;
+    int maxNumber=int(circleLength/radius);
+    int minNumber=int(radius*1);
+    number = int(random(minNumber, maxNumber));
 
     offsetVector.set(speedFront);
     offsetVector.rotate(HALF_PI);
@@ -76,7 +80,28 @@ class RedFlower {
 
     redflower.drawRectangles(r*number);
 
+    //draw green rect
     strokeWeight(1);
+
+    pushMatrix(); // 現在の座標系を保存
+    translate(movedPos.x, movedPos.y);
+
+    //float angle = random(TWO_PI); // ラジアン単位
+    float angle = atan2(height / 2 - movedPos.y, width / 2 - movedPos.x); // ラジアン単位
+    rotate(angle); // その角度で回転
+    rotate(angle);
+    rectMode(CENTER);
+    noStroke();
+    //fill(0);
+    //rect(0, 0, radius*(number)+1, radius*(number)+1);
+    stroke(1);
+    fill(35, 242, 35);//green
+    for (int i = 0; i < number; i++) {
+      rect(0, 0, radius*(number-i), radius*(number-i));
+    }
+    popMatrix();
+
+    //draw red circle
     for (int i = 0; i < number; i++) {
       float random1 = random(1);
       float random2 = random(1);
@@ -87,22 +112,25 @@ class RedFlower {
       } else {
         stroke(50); // ストロークを細めに
       }
-
-      if (random2 < 0.85) {
+      if (i==0) {
+        stroke(0);
+        strokeWeight(1);
+        ellipse(movedPos.x, movedPos.y, radius * (number - i), radius * (number - i));
+      } else if (random2 < 0.80) {
         stroke(0);
         strokeWeight(0.5);
         ellipse(movedPos.x, movedPos.y, radius * (number - i), radius * (number - i));
       }
     }
   }
-  
+
   void setRectangles(float ratioR, float rectsizeR, float lineEndXR, float lineEndYR) {
     ratio=ratioR;
     rectsize=rectsizeR;
     lineEndX=lineEndXR;
     lineEndY=lineEndYR;
   }
-  
+
   void drawRectangles(float radius) {
     lineStartX=movedPos.x;
     lineStartY=movedPos.y;
@@ -116,7 +144,7 @@ class RedFlower {
     float distance = dist(lineStartX, lineStartY, midX, midY);
 
     // 1つ目の長方形
-    fill(250,150);
+    fill(250, 150);
     //stroke(0);
     noStroke();
     pushMatrix();
@@ -124,43 +152,36 @@ class RedFlower {
     int numCircles = int((distance / rectsize)*2); // 距離に応じて円の数を計算
     float stepX = (midX - lineStartX) / numCircles;
     float stepY = (midY - lineStartY) / numCircles;
+    float currentSize=100;
 
-    for (int i = 0; i <= numCircles; i++) {
+    for (int i = 0; currentSize>10; i++) {
       float x = lineStartX + stepX * i;
       float y = lineStartY + stepY * i;
 
       // 円のサイズを徐々に縮小
-      float currentSize = lerp(rectsize, rectsize-rectsize*0.5, i / float(numCircles));
+      currentSize = lerp(rectsize, rectsize-rectsize*0.5, i / float(numCircles));
       //float currentSize=rectsize;
+      color red=color(255, 35, 35, 255);
+      //color green = color(87, 142, 17, 100);
+      color green = color(255, 255, 255, 220);//white
 
+      color redgreen=lerpColor(red, green, i / float(numCircles));
+
+      pushMatrix(); // 現在の座標系を保存
+      translate(x, y);
+      fill(255, 100);
+      float angler = random(TWO_PI); // ラジアン単位
+      rotate(angler);
+      rectMode(CENTER);
+      //noStroke();
+      stroke(0);
+      strokeWeight(2);
+      //rect(0, 0, currentSize, currentSize);
+      popMatrix();
+      fill(redgreen);
       ellipse(x, y, currentSize, currentSize); // 直径に currentSize を使用
     }
     popMatrix();
-
-    // 2つ目の長方形
-    //fill(0);
-    //noStroke();
-    //pushMatrix();
-    //translate(lineStartX, lineStartY);
-    //rotate(angle + PI / 3);
-    //rect(0, 0, distance, rectsize/5);
-    //popMatrix();
-
-    //// 3つ目の長方形
-    //fill(255);
-    //stroke(0);
-    //pushMatrix();
-    //for (int i = 0; i <= numCircles; i++) {
-    //  float x = lineStartX - stepX * i;
-    //  float y = lineStartY - stepY * i;
-
-    //  // 円のサイズを徐々に縮小
-    //  //float currentSize = lerp(rectsize, rectsize+rectsize*0.7, i / float(numCircles));
-    //  float currentSize=rectsize;
-
-    //  ellipse(x, y, currentSize, currentSize); // 直径に currentSize を使用
-    //}
-    //popMatrix();
   }
 
   void drawRed() {

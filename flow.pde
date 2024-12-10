@@ -1,3 +1,4 @@
+import processing.pdf.*;
 int r = 5;
 int number = 20;
 int monoCount = 0;
@@ -48,7 +49,8 @@ BlackRectMover blackRectMover;
 RedFlower redflower;
 
 void setup() {
-  size(1440, 900); // キャンバスサイズを設定
+  size(2067,1462); // キャンバスサイズを設定
+  //fullScreen();
   stroke(100);    // グレーの縁
   weight = random(1);
   strokeWeight(weight); // 線の太さをランダムに設定
@@ -104,29 +106,6 @@ void setup() {
   color blueColor = color(244, 235, 252);
   float angleAccount=0;
 
-  //No.1
-  //gap = 5; // 円と円の間隔
-  //numRotations=60;
-  //minRadius=20;
-  //maxRadius=150;
-  //angleStep = TWO_PI / numRotations; // 回転角度のステップ
-  //numCircles = int(dist(0, 0, width/2, height/2)/gap);
-  //whiteColor=color(41, 36, 93);
-  //blueColor=color(12, 8, 52);
-  //greenColor=color(12, 8, 52);
-  //strokeWeight(0.3);
-
-  //redflower.setBackground(numCircles, minRadius, maxRadius, gap, whiteColor, blueColor, greenColor);
-
-  //for (int i = 0; i < numRotations; i++) {
-  //  pushMatrix(); // 座標系を保存
-  //  angleAccount=angleAccount+angleStep;
-  //  rotate(angleAccount); // 回転
-  //  redflower.drawBackground();
-  //  countBack+=1;
-  //  popMatrix(); // 座標系を復元
-  //}
-
   //No.2
   gap = 30; // 円と円の間隔
   numRotations=40;
@@ -167,8 +146,8 @@ void setup() {
   greenColor=color(0, 10);
 
   strokeWeight(1.5);
-  stroke(200);
-  stroke(238, 255, 18, 50);
+  stroke(200, 170);
+  //stroke(238, 255, 18, 50);
 
   redflower.setBackground(numCircles, minRadius, maxRadius, gap, whiteColor, blueColor, greenColor);
 
@@ -202,40 +181,91 @@ void setup() {
   blackRectMover = new BlackRectMover(blackRectStart, blackRectEnd, blackRectSpread, blackRectEasing, blackRectSpeedMeter);
   blackRectMover.update();
 
-  //draw blue circle
+  //setup blue circle
   strokeWeight(1);
-  int numberBlue=50;
-  float radiusBlue=5;
-  int randomjudge=2;
-  noStroke();
-  for (int i = 0; i < numberBlue; i++) {
-    float random1 = random(1);
-    int random2 = int(random(-randomjudge, randomjudge));
-    int random3 = int(random(-randomjudge, randomjudge));
-    
+  int numberBlue=10;
+  float radiusBlue=300;
+  float oneradius=radiusBlue/numberBlue;
+  int randomjudge=0;
+  float random1 = random(1);
+  int random2 = int(random(-randomjudge, randomjudge));
+  int random3 = int(random(-randomjudge, randomjudge));
+
+  //drawbackgroundGreen
+  //stroke(0);
+  //strokeWeight(1);
+  //rectMode(CENTER);
+  //int rectNumberG=60;
+  //int rotateNumber=3;
+  //fill(35, 255, 35);
+  ////noFill();
+  //float rectSizeG = 290;
+  //float rotateAngle=2;
+  //float baseAngle=PI/(rotateNumber);
+  //float separateSize=rectSizeG/rectNumberG;
+  //float randomjudgeG=0;
+
+  //for (int o=0; o<=rotateNumber; o++) {
+  //  pushMatrix();
+  //  translate(width*0.5, height*0.5);
+  //  rotateAngle=rotateAngle+baseAngle;
+  //  rotate(TWO_PI/(o+1));
+  //  for (int g=0; g<rectNumberG; g++) {
+  //    random2 = int(random(-randomjudgeG, randomjudgeG));
+  //    random3 = int(random(-randomjudgeG, randomjudgeG));
+  //    float greenRect=separateSize*(rectNumberG-g);
+  //    rect(0, 0, greenRect, greenRect); // 矩形を描画
+  //    //rect(0+random2*separateSize, 0+random3*separateSize, greenRect, greenRect); // 矩形を描画
+  //  }
+  //  popMatrix();
+  //}
+
+  //drawBlueCircle
+  for (int i = 0; 1 <= radiusBlue; i++) {
+    random1 = random(1);
+    random2 = int(random(-randomjudge, randomjudge));
+    random3 = int(random(-randomjudge, randomjudge));
+
+    oneradius=4;
     fill(35, 35, 255);
-    
-    if (random1 < 0.95) {
+    if (i==0) {
       stroke(0);
-      strokeWeight(2);
-      if (i==0) {
-        ellipse(width/2, height/2, radiusBlue * (numberBlue - i), radiusBlue * (numberBlue - i));
-      } else {
-        stroke(0);
-        strokeWeight(0.5);
-        noFill();
-        ellipse(width/2+radiusBlue*random2, height/2+radiusBlue*random3, radiusBlue * (numberBlue - i), radiusBlue * (numberBlue - i));
-      }
+      strokeWeight(3);
+      //ellipse(width/2, height/2, oneradius * (numberBlue - i), oneradius * (numberBlue - i));
+      ellipse(width/2, height/2, radiusBlue, radiusBlue);
+    } else if (random1<1) {
+      radiusBlue=radiusBlue*0.99;
+      stroke(0);
+      strokeWeight(0.5);
+      noFill();
+      ellipse(width/2+oneradius*random2, height/2+oneradius*random3,
+        radiusBlue, radiusBlue);
+      //ellipse(width/2+oneradius*random2, height/2+oneradius*random3, oneradius * (numberBlue - i), oneradius * (numberBlue - i));
     }
   }
+
+
+
+  //int blueLineNumber=70;
+  //float blueLineangle=TWO_PI/blueLineNumber;
+  //stroke(0);
+  //strokeWeight(2);
+  //for (int j=0; j<blueLineNumber; j++) {
+  //  pushMatrix();
+  //  translate(width*0.5, height*0.5);
+  //  rotate(blueLineangle*j); // 角度を回転
+  //  line(0, radiusBlue*0.7, 0, radiusBlue*0.5);
+  //  popMatrix();
+  //}
+
 
 
   //draw red circle
   startFront.set(0, 0);
   endFront.set(width, height);
-  float mult=0.005;
+  float mult=0.003;
 
-  float r=7;
+  float r=4;
   redflower.initialize(startFront.x, startFront.y, endFront.x, endFront.y, mult, r);
 
   spread=10;
