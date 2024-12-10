@@ -49,7 +49,7 @@ BlackRectMover blackRectMover;
 RedFlower redflower;
 
 void setup() {
-  size(2067,1462); // キャンバスサイズを設定
+  size(1440,900); // キャンバスサイズを設定
   //fullScreen();
   stroke(100);    // グレーの縁
   weight = random(1);
