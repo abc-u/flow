@@ -49,7 +49,8 @@ BlackRectMover blackRectMover;
 RedFlower redflower;
 
 void setup() {
-  size(1440,900); // キャンバスサイズを設定
+  beginRecord(PDF, "barabara.pdf");
+  size(2866,2028); // キャンバスサイズを設定
   //fullScreen();
   stroke(100);    // グレーの縁
   weight = random(1);
@@ -279,5 +280,5 @@ void setup() {
 
   startFront.set(0, height*0.5);
   endFront.set(width*0.25, height);
-  saveFrame("barabara.png");
+  endRecord();
 }

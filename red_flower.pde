@@ -14,7 +14,6 @@ class RedFlower {
   color blueColor;
   color greenColor;
 
-
   RedFlower() {
     //this.number = int(random(7, 22));
     //this.r = radius;
@@ -82,18 +81,10 @@ class RedFlower {
     redflower.drawRectangles(r*number);
 
     //draw green rect
-    
     strokeWeight(1);
+
     pushMatrix(); // 現在の座標系を保存
-    
-    float greenRectX,greenRectY;
-    float moveGreenX,moveGreenY;
-    moveGreenX=movedPos.x-width/2;
-    moveGreenY=movedPos.y-height/2;
-    
-    greenRectX=movedPos.x+moveGreenX*0.1;
-    greenRectY=movedPos.y+moveGreenY*0.1;
-    translate(greenRectX, greenRectY);
+    translate(movedPos.x, movedPos.y);
 
     //float angle = random(TWO_PI); // ラジアン単位
     float angle = atan2(height / 2 - movedPos.y, width / 2 - movedPos.x); // ラジアン単位
@@ -106,13 +97,11 @@ class RedFlower {
     stroke(1);
     fill(35, 242, 35);//green
     for (int i = 0; i < number; i++) {
-      //rect(0, 0, radius*(number-i), radius*(number-i));
-      rect(greenRectX*i*2, greenRectY*i*2, radius*(number-i), radius*(number-i));
+      rect(0, 0, radius*(number-i), radius*(number-i));
     }
     popMatrix();
 
     //draw red circle
-    
     for (int i = 0; i < number; i++) {
       float random1 = random(1);
       float random2 = random(1);
@@ -153,13 +142,8 @@ class RedFlower {
 
     float angle = atan2(midY - lineStartY, midX - lineStartX);
     float distance = dist(lineStartX, lineStartY, midX, midY);
-    
-    //draw black line
-    strokeWeight(1);
-    stroke(0,100);
-    line(movedPos.x,movedPos.y,width/2,height/2);
 
-    // draw circle white to red
+    // 1つ目の長方形
     fill(250, 150);
     //stroke(0);
     noStroke();
@@ -174,13 +158,14 @@ class RedFlower {
       float x = lineStartX + stepX * i;
       float y = lineStartY + stepY * i;
 
+      // 円のサイズを徐々に縮小
       currentSize = lerp(rectsize, rectsize-rectsize*0.5, i / float(numCircles));
       //float currentSize=rectsize;
       color red=color(255, 35, 35, 255);
       //color green = color(87, 142, 17, 100);
-      color white = color(255, 255, 255, 220);//white
+      color green = color(255, 255, 255, 220);//white
 
-      color redgreen=lerpColor(red, white, i / float(numCircles));
+      color redgreen=lerpColor(red, green, i / float(numCircles));
 
       pushMatrix(); // 現在の座標系を保存
       translate(x, y);
