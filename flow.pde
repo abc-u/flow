@@ -49,8 +49,8 @@ BlackRectMover blackRectMover;
 RedFlower redflower;
 
 void setup() {
-  beginRecord(PDF, "barabara.pdf");
-  size(2866,2028); // キャンバスサイズを設定
+  //beginRecord(PDF, "barabara.pdf");
+  size(3035,2150); // キャンバスサイズを設定
   //fullScreen();
   stroke(100);    // グレーの縁
   weight = random(1);
@@ -108,15 +108,19 @@ void setup() {
   float angleAccount=0;
 
   //No.2
-  gap = 30; // 円と円の間隔
-  numRotations=40;
-  minRadius=55;
-  maxRadius=0;
+  gap = 50; // 円と円の間隔
+  numRotations=60;
+  minRadius=0;
+  maxRadius=100;
   angleStep = TWO_PI / numRotations; // 回転角度のステップ
   numCircles = int(dist(0, 0, width/2, height/2)/gap);
-  whiteColor=color(244, 235, 252, 20);
-  blueColor=color(184, 181, 209, 20);
-  greenColor=color(200, 200, 200, 20);
+  whiteColor=color(255);
+  blueColor=color(255 );
+  greenColor=color(0,0,255);
+  
+  whiteColor=color(255);
+  blueColor=color(94,160,60);
+  greenColor=color(100,255,70);
 
   //whiteColor=color(238,255,18, 20);
   //blueColor=color(238,255,18, 20);
@@ -135,16 +139,16 @@ void setup() {
   }
 
   //NO.3
-  gap = 60; // 円と円の間隔
+  gap = 50; // 円と円の間隔
   numRotations=20;
-  minRadius=10;
-  maxRadius=100;
+  minRadius=50;
+  maxRadius=0;
   angleStep = TWO_PI / numRotations; // 回転角度のステップ
   numCircles = int(dist(0, 0, width/2, height/2)/gap);
-
-  whiteColor=color(55, 10);
-  blueColor=color(0, 10);
-  greenColor=color(0, 10);
+  
+  whiteColor=color(255);
+  blueColor=color(255 );
+  greenColor=color(0,0,255);
 
   strokeWeight(1.5);
   stroke(200, 170);
@@ -183,7 +187,7 @@ void setup() {
   blackRectMover.update();
 
   //setup blue circle
-  strokeWeight(1);
+  strokeWeight(0.5);
   int numberBlue=10;
   float radiusBlue=300;
   float oneradius=radiusBlue/numberBlue;
@@ -237,7 +241,7 @@ void setup() {
     } else if (random1<1) {
       radiusBlue=radiusBlue*0.99;
       stroke(0);
-      strokeWeight(0.5);
+      strokeWeight(0.3);
       noFill();
       ellipse(width/2+oneradius*random2, height/2+oneradius*random3,
         radiusBlue, radiusBlue);
@@ -264,14 +268,14 @@ void setup() {
   //draw red circle
   startFront.set(0, 0);
   endFront.set(width, height);
-  float mult=0.003;
+  float mult=0.0009;
 
   float r=4;
   redflower.initialize(startFront.x, startFront.y, endFront.x, endFront.y, mult, r);
 
   spread=10;
-  float ratio = 0.3;
-  int rectsize = 50;
+  float ratio = 0.2;
+  int rectsize = 1;
   lineEndX=width/2;
   lineEndY=height/2;
 
@@ -280,5 +284,6 @@ void setup() {
 
   startFront.set(0, height*0.5);
   endFront.set(width*0.25, height);
-  endRecord();
+  save("flow.png");
+  //endRecord();
 }

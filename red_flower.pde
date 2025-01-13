@@ -68,8 +68,8 @@ class RedFlower {
 
   void drawCircle() {
     //radius = r;
-    radius=5;
-    float circleLength=130;
+    radius = 4;
+    float circleLength=150;
     int maxNumber=int(circleLength/radius);
     int minNumber=int(radius*1);
     number = int(random(minNumber, maxNumber));
@@ -152,7 +152,7 @@ class RedFlower {
     int numCircles = int((distance / rectsize)*2); // 距離に応じて円の数を計算
     float stepX = (midX - lineStartX) / numCircles;
     float stepY = (midY - lineStartY) / numCircles;
-    float currentSize=100;
+    float currentSize=300;
 
     for (int i = 0; currentSize>10; i++) {
       float x = lineStartX + stepX * i;
@@ -187,7 +187,7 @@ class RedFlower {
   void drawRed() {
     while (currentFront.x > -50 && currentFront.x < width + 50 &&
       currentFront.y > -50 && currentFront.y < height + 50) {
-      spread = spread + 400 * easingFront;
+      spread = spread + 250 * easingFront;
       int randomSpread = int(random(-spread, spread));
       offsetVector.mult(randomSpread);
 
